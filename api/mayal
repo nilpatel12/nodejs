@@ -1,0 +1,235 @@
+// const express = require('express');
+// const db = require('./config/db')
+// const cors = require('cors')
+
+// const app = express();
+// const  PORT = 3002;
+// app.use(cors());
+// app.use(express.json())
+
+// // Route to get all posts
+// app.get("/api/get", (req,res)=>{
+// db.query("SELECT * FROM posts", (err,result)=>{
+//     if(err) {
+//     console.log(err)
+//     } 
+// res.send(result)
+// });   });
+
+// // Route to get one post
+// app.get("/api/getFromId/:id", (req,res)=>{
+
+// const id = req.params.id;
+//  db.query("SELECT * FROM posts WHERE id = ?", id, 
+//  (err,result)=>{
+//     if(err) {
+//     console.log(err)
+//     } 
+//     res.send(result)
+//     });   });
+
+// // Route for creating the post
+// app.post('/api/create', (req,res)=> {
+
+// const username = req.body.userName;
+// const title = req.body.title;
+// const text = req.body.text;
+
+// db.query("INSERT INTO posts (title, post_text, user_name) VALUES (?,?,?)",[title,text,username], (err,result)=>{
+//    if(err) {
+//    console.log(err)
+//    } 
+//    console.log(result)
+// });   })
+
+// // Route to like a post
+// app.post('/api/like/:id',(req,res)=>{
+
+// const id = req.params.id;
+// db.query("UPDATE posts SET likes = likes + 1 WHERE id = ?",id, (err,result)=>{
+//     if(err) {
+//    console.log(err)   } 
+//    console.log(result)
+//     });    
+// });
+
+// // Route to delete a post
+
+// app.delete('/api/delete/:id',(req,res)=>{
+// const id = req.params.id;
+
+// db.query("DELETE FROM posts WHERE id= ?", id, (err,result)=>{
+// if(err) {
+// console.log(err)
+//         } }) })
+
+// app.listen(PORT, ()=>{
+//     console.log(`Server is running on ＄{PORT}`)
+// })
+
+
+// / const express =require("express");
+// const cors = require("cors");
+// const app = express();
+
+// app.use = express(cors());
+
+
+// const port =process.env.PORT || 3000;
+
+// const apiData = require("./data.json")
+// app.get("/" , (req, res) => {
+//     res.send("mayal");
+// });
+// app.get("/service",(req,res) =>
+// {
+//     res.send(apiData);
+// });
+
+// app.listen(port , () =>{
+//     console.log("HYY MAYAL I AM LIVE");
+// });
+
+// const mysql = require('mysql');
+// const connection = mysql.createConnection({
+//     host : 'localhost',
+//           port : 8889,
+//           user : 'root',
+//           password : 'root',
+//           database : 'creensight',
+//           socketPath : '/Applications/MAMP/tmp/mysql/mysql.sock'
+//   });
+
+//   connection.query('SELECT * FROM users', (error, results, fields) => {
+//     if (error) throw error;
+//     console.log(results);
+//   });
+//   connection.end();
+
+
+//  knex.insert({  first_name: f_name, last_name: l_name, mobile: mobile, address: address, age: age }).into('users/create')
+//   .returning('*')
+//   .then((rows) => {
+//     console.log('Data inserted successfully!', rows);
+//   })
+//   .catch((error) => {
+//     console.error(error);
+//   });
+  
+
+
+  // knex('users').where('id', 7).update({ first_name: 'chirag' })
+  // .returning('*')
+  // .then((rows) => {
+  //   console.log('Data updated successfully!', rows);
+  // })
+  // .catch((error) => {
+  //   console.error(error);
+  // });
+
+//   knex('users').where('id', 6).delete()
+//   .returning('*')
+//   .then((rows) => {
+//     console.log('Data deleted successfully!', rows);
+//   })
+//   .catch((error) => {
+//     console.error(error);
+//   });
+
+
+
+// app.get('/users/join', (req, res) => {
+//   knex('users')
+//   .join('users_info', 'users.id', '=', 'users_info.u_id')
+//   .select('users.id', 'users.first_name', 'users.last_name', 'users_info.e_no','users_info.c_name','users_info.class','users.age','users.mobile','users.address')
+//   .then(results => {
+//     res.json(results);
+//   })
+//   .catch(error => {
+//     console.error(error);
+//     res.status(500).json({ error: 'An error occurred' });
+//   });
+
+// });
+
+// app.delete('/users/delete', (req, res) => {
+//   const { id} = req.body;
+//   knex('users')
+//     .where({'id':id })
+//     .del()
+//     .then(() => {
+//       res.status(200).send('User delete successfully')
+//     }) 
+//     .catch(error => {
+//       res.status(500).json({ error: error.message })
+//     })
+// });
+
+
+// app.put('/users/updete', (req, res) => {
+//   const { id,first_name, last_name, mobile,address,age } = req.body
+  
+ 
+//   knex('users').where({ 'id':id }).update({first_name, last_name, mobile,address,age  })
+//     .then(() => {
+//       res.status(200).send('User updated successfully')
+//     })
+//     .catch(error => {
+//       res.status(500).json({ error: error.message })
+//     })
+// })
+
+
+  
+// app.post('/users/create', (req, res) => {
+//   const { first_name, last_name, mobile,address,age} = req.body
+
+//   knex('users').insert({ first_name, last_name, mobile,address,age }).returning('*')
+//     .then(insertedRows => {
+       
+//       res.status(201).json(insertedRows)
+     
+//     })
+//     .catch(error => {
+        
+//       res.status(500).json({ error: error.message })
+//     })
+// })
+
+
+// app.get('/users', getUser.users);
+// app.get('/users/create', getUser.create);
+// app.get('/users/update', getUser.update);
+// app.get('/users/delete', getUser.delete);
+// app.get('/users/userinfobyemail', getUser.delete);
+
+router.post('/users/loginpost', (req, res) => {
+  const { first_name,last_name,mobile, address,age,email, password } = req.body;
+  console.log(password,48);
+  creatUser(first_name, last_name, mobile, address, age, email, password)
+  .then(insertedRows => {
+    res.status(201).json(insertedRows);
+   console.log(insertedRows);
+  })
+  .catch(error => {
+    res.status(500).json({ error: error.message });
+  });
+});
+
+
+async function creatUser(first_name, last_name, mobile, address, age, email, password) {
+  
+  try {
+    
+    const hasPass = await bcrypt.hash(password, 10);
+   
+    knex('users')
+    .insert({ first_name,last_name,mobile, address,age,email,password:hasPass })
+    console.log(password);
+   
+  } catch (error) {
+    return error;
+   
+  }
+}
+
