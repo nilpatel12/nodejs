@@ -1,0 +1,328 @@
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
+import './Login.css';
+
+function Login() {
+  const [user, setUser] = useState({
+    email: '',
+    password: '',
+  });
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    setUser({ ...user, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post('http://localhost:4000/Route/index/users/loginapi', user);
+      console.log(res);
+      localStorage.setItem('user-info', JSON.stringify(user));
+      navigate('/dashboard');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return (
+    <form className="login-form" onSubmit={handleSubmit}>
+      <label htmlFor="email">Email</label>
+      <input type="text" id="email" name="email" value={user.email} onChange={handleChange} />
+      <label htmlFor="password">Password</label>
+      <input type="password" id="password" name="password" value={user.password} onChange={handleChange} />
+      <button type="submit">Login</button>
+    </form>
+  );
+}
+
+export default Login;
+
+
+<form className="login-form" onSubmit={handleSubmit}>
+<label htmlFor="username">username</label>
+  <input
+    type="text"
+    id="username"
+    name="username"
+    value={username}
+    onChange={handleChange}/>
+<label htmlFor="email">email</label>
+  <input
+    type="text"
+    id="email"
+    name="email"
+    value={email}
+    onChange={handleChange} />
+<label htmlFor="password">Password</label>
+  <input
+    type="password"
+    id="password"
+    name="password"
+    value={password}
+    onChange={handleChange}/>
+  <button type="submit">Login</button>
+</form>
+);
+}
+
+
+
+
+
+import 'reactjs-popup/dist/index.css';
+import Popup from 'reactjs-popup';
+import React, { useState } from 'react'
+import { useNavigate } from "react-router-dom"
+import { Form, FormGroup, Label, Input, Button } from "reactstrap";
+import axios from "axios";
+// import Header from './Header';
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./Profile.css";
+import "../component/Feedback.css"
+var bg = { "background-color": "#99aab5" ,"margin-left": "186px"}
+
+
+
+
+const Feedback = () => {
+    const [user, setUser] = useState({
+        name: "",
+        email: "",
+        mobile: "",
+        message: ""
+      });
+      const navigate = useNavigate();
+
+      const { name, email, mobile,message } = user;
+
+       
+  const handleChange = (e) => {
+    console.log("ujash 24", e);
+    setUser({ ...user, [e.target.name]: e.target.value });
+    console.log({ ...user, [e.target.name]: e.target.value });
+
+  };
+  
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post('http://localhost:4000/Route/index/users/feedback', user);
+      console.log(res);
+      // navigate("/dashboard");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  
+
+
+  return (
+ 
+    <>
+      <div>
+           
+            <Popup trigger=
+                {  <Button style={bg}> Feedback</Button>}
+                position="">
+               
+      <div className="profile-container">
+        <Form
+         onSubmit={handleSubmit}
+         >
+
+          <h1>Feedback Page</h1>
+          <FormGroup>
+            <Label for="name">Name</Label>
+            <Input type="text" name="name" id="name"
+             value={name} onChange={handleChange} 
+             placeholder="Enter Your Name" />
+          </FormGroup>
+
+          <FormGroup>
+            <Label for="email">Email</Label>
+            <Input type="email" name="email" id="email"
+             value={email} onChange={handleChange} 
+             placeholder="Enter Your Email" />
+          </FormGroup>
+          <FormGroup>
+            <Label for="mobile">Mobile</Label>
+            <Input type="number" name="mobile" id="mobile"
+             value={mobile} onChange={handleChange} 
+             placeholder="Enter Your Mobile" />
+          </FormGroup>
+          <FormGroup>
+          
+            <Label for="message">Message</Label>
+            <Input type="textarea" name="message" id="message"
+             value={message} onChange={handleChange} 
+             placeholder="Enter Your Message" />
+            
+          </FormGroup>
+
+          <Button style={bg}> Profile Save</Button>
+        </Form>
+      </div>
+             
+            </Popup>
+        </div>
+
+
+    </>
+  )
+}
+
+export default Feedback
+
+
+
+
+import React, { useState, useEffect } from 'react'
+import Header from './Header'
+import axios from "axios";
+
+const List = () => {
+  const [users, setUsers] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [usersPerPage] = useState(5);
+  
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.post('http://localhost:4000/Route/index/users/listing', {
+          page: currentPage,
+          perPage: usersPerPage,
+        });
+        console.log(res.data);
+        setUsers(res.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchData();
+  }, [currentPage]);
+
+  const indexOfLastUser = currentPage * usersPerPage;
+  const indexOfFirstUser = indexOfLastUser - usersPerPage;
+  const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
+
+  const totalPages = Math.ceil(users.length / usersPerPage);
+  const pageNumbers = [];
+
+  for (let i = 1; i <= totalPages; i++) {
+    pageNumbers.push(i);
+  }
+  const goToNextPage = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
+  };
+
+  const goToPrevPage = () => {
+    setCurrentPage((prevPage) => prevPage - 1);
+  };
+
+  return (
+    <>
+      <Header />
+      <div className="container mt-5">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Id</th>
+              <th scope="col">Name</th>
+              <th scope="col">Email</th>
+              <th scope="col">Hobbies</th>
+            </tr>
+          </thead>
+          <tbody>
+            {currentUsers.map((item, index) => {
+              return (
+                <tr key={index}>
+                  <td>{item.id}</td>
+                  <td>{item.fname}</td>
+                  <td>{item.email}</td>
+                  <td>{JSON.parse(item.hobbies)}</td>
+                </tr>
+              );
+            })}
+
+          </tbody>
+        </table>
+        
+
+        <>
+          {/* Render table */}
+          {/* Pagination */}
+          {/* <ul className="pagination">
+            {pageNumbers.map((number) => (
+              <li
+                key={number}
+                className={`page-item ${currentPage === number ? 'active' : ''}`}
+              >
+                <button
+                  className="page-link"
+                  onClick={() => setCurrentPage(number)}
+                >
+                  {number}
+                </button>
+              </li>
+            ))}
+          </ul> */}
+          <ul className="pagination">
+          <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+            <button
+              className="page-link"
+              onClick={goToPrevPage}
+              disabled={currentPage === 1}
+            >
+              Prev
+            </button>
+          </li>
+
+          {pageNumbers.map((number) => (
+            <li
+              key={number}
+              className={`page-item ${currentPage === number ? 'active' : ''}`}
+            >
+              <button
+                className="page-link"
+                onClick={() => setCurrentPage(number)}
+              >
+                {number}
+              </button>
+            </li>
+          ))}
+
+          <li
+            className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}
+          >
+            <button
+              className="page-link"
+              onClick={goToNextPage}
+              disabled={currentPage === totalPages}
+            >
+              Next
+            </button>
+          </li>
+        </ul>
+        </>
+        
+      </div>
+    </>
+  )
+}
+
+export default List
+
+
+const [seachData, setSeachData] = useState([]);
+
+    const handleChange = (value) => { 
+      const fname = seachData.filter(item => item.fname.toLowerCase() === value.toLowerCase(value))
+    }
+
+    setSeachData(res.data);
